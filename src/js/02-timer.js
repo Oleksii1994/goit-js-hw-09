@@ -18,11 +18,9 @@ const options = {
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
-  onClose(selectedDates) {
-    const selectedDate = selectedDates[0].getTime();
-    const currentTime = new Date().getTime();
-    const deltaTime = selectedDate - currentTime;
-    if (deltaTime < 0) {
+  onClose() {
+    const isChosenDate = dates();
+    if (isChosenDate < 0) {
       window.alert('Please choose a date in the future');
       return;
     }
@@ -33,18 +31,22 @@ const options = {
 flatpickr(refs.inputDateEl, options);
 
 function start() {
-  const startTime = new Date(refs.inputDateEl.value).getTime();
-
   setInterval(() => {
-    const currentTime = new Date().getTime();
-    const deltaTime = startTime - currentTime;
+    const resultDate = dates();
 
-    if (deltaTime < 0) {
+    if (resultDate < 0) {
       return;
     }
-    const timeComponents = convertMs(deltaTime);
+    const timeComponents = convertMs(resultDate);
     return updateClockFace(timeComponents);
   }, 1000);
+}
+
+function dates() {
+  const selectedDate = new Date(refs.inputDateEl.value).getTime();
+  const currentTime = new Date().getTime();
+  const deltaTime = selectedDate - currentTime;
+  return deltaTime;
 }
 
 function convertMs(ms) {
