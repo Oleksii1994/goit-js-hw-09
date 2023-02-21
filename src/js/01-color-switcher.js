@@ -5,6 +5,7 @@ const refs = {
 };
 
 let timerId = null;
+setDisabledAttribute(refs.btnStop);
 
 refs.btnStart.addEventListener('click', onBtnStartClick);
 refs.btnStop.addEventListener('click', onBtnStopClick);
@@ -13,13 +14,10 @@ function getRandomHexColor() {
   return `${`#${Math.floor(Math.random() * 16777215).toString(16)}`}`;
 }
 
-function changeBodyColor() {
-  refs.bodyEl.style.backgroundColor = `${getRandomHexColor()}`;
-}
-
 function onBtnStartClick() {
-  refs.btnStart.setAttribute('disabled', 'true');
   changeBodyColor();
+  removeAttributeDisabled(refs.btnStop);
+  setDisabledAttribute(refs.btnStart);
 
   timerId = setInterval(() => {
     changeBodyColor();
@@ -27,6 +25,19 @@ function onBtnStartClick() {
 }
 
 function onBtnStopClick() {
+  setDisabledAttribute(refs.btnStop);
+  removeAttributeDisabled(refs.btnStart);
   clearInterval(timerId);
-  refs.btnStart.removeAttribute('disabled');
+}
+
+function changeBodyColor() {
+  refs.bodyEl.style.backgroundColor = `${getRandomHexColor()}`;
+}
+
+function setDisabledAttribute(btn) {
+  btn.setAttribute('disabled', 'true');
+}
+
+function removeAttributeDisabled(btn) {
+  btn.removeAttribute('disabled');
 }
