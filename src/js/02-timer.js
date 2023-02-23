@@ -11,7 +11,7 @@ const refs = {
   secEl: document.querySelector('[data-seconds]'),
 };
 
-refs.btnEl.setAttribute('disabled', 'true');
+setDisabledAttribute(refs.btnEl);
 refs.btnEl.addEventListener('click', start);
 
 const options = {
@@ -23,17 +23,17 @@ const options = {
     const isChosenDate = dates();
     if (isChosenDate < 0) {
       Notify.failure('Please choose a date in the future');
-      // window.alert('Please choose a date in the future');
       return;
     }
     Notify.success('Valid date chosen, press "Start"');
-    refs.btnEl.removeAttribute('disabled');
+    removeAttributeDisabled(refs.btnEl);
   },
 };
 
 flatpickr(refs.inputDateEl, options);
 
 function start() {
+  setDisabledAttribute(refs.btnEl);
   setInterval(() => {
     const resultDate = dates();
 
@@ -75,4 +75,12 @@ function updateClockFace({ days, hours, minutes, seconds }) {
   refs.hoursEl.textContent = hours;
   refs.minEl.textContent = minutes;
   refs.secEl.textContent = seconds;
+}
+
+function setDisabledAttribute(btn) {
+  btn.setAttribute('disabled', 'true');
+}
+
+function removeAttributeDisabled(btn) {
+  btn.removeAttribute('disabled');
 }
